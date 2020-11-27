@@ -1,25 +1,27 @@
 package com.docket.cartorio.entities;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Certidao {
 
     @Id
     @GeneratedValue
-    private Integer id;
+    private Integer idCertidao;
 
     private String nome;
 
-    public Integer getId() {
-        return id;
+    @ManyToOne
+    @JoinColumn(name = "fkCartorio")
+    private Cartorio cartorio;
+
+    public Integer getIdCertidao() {
+        return idCertidao;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIdCertidao(Integer idCertidao) {
+        this.idCertidao = idCertidao;
     }
 
     public String getNome() {
@@ -29,4 +31,13 @@ public class Certidao {
     public void setNome(String nome) {
         this.nome = nome;
     }
+
+    public Cartorio getCartorio() {
+        return cartorio;
+    }
+
+    public void setCartorio(Cartorio cartorio) {
+        this.cartorio = cartorio;
+    }
+
 }

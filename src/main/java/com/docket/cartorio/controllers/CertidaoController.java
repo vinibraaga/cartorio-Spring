@@ -1,11 +1,14 @@
 package com.docket.cartorio.controllers;
 
+import com.docket.cartorio.entities.Cartorio;
 import com.docket.cartorio.entities.Certidao;
+import com.docket.cartorio.repositories.CartorioRepository;
 import com.docket.cartorio.repositories.CertidaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -15,23 +18,31 @@ public class CertidaoController {
     @Autowired
     private CertidaoRepository repository;
 
-    @PostMapping
-    public ResponseEntity criarCertidao(@RequestBody Certidao novaCertidao) {
-        this.repository.save(novaCertidao);
+    @Autowired
+    private CartorioRepository cartorioRepository;
 
-        return ResponseEntity.created(null).build();
-    }
+    @PostMapping("/{id}")
+    public ResponseEntity criarCertidao(@PathVariable Integer id ,@RequestBody Certidao novaCertidao) {
 
-    @GetMapping
-    public ResponseEntity listarCertidoes() {
-        if (this.repository.count() > 0) {
-            return ResponseEntity.ok(this.repository.findAll());
+        Cartorio cartorio = cartorioRepository.findById(id).get();
+
+        if(cartorio != null) {
+            novaCertidao.setCartorio(cartorio);
+            this.repository.save(novaCertidao);
+            return ResponseEntity.created(null).build();
         } else {
-            return  ResponseEntity.noContent().build();
+            return ResponseEntity.badRequest().build();
         }
     }
 
-    @PutMapping("{id}")
+    @GetMapping("/{id}")
+    public ResponseEntity listarCertidoesCartorio(@PathVariable Integer id) {
+        List certidoes = repository.findByCartorioId(id);
+
+        return certidoes.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(certidoes);
+    }
+
+    @PutMapping("/{id}")
     public ResponseEntity alterarCertidao(@PathVariable Integer id, @RequestBody Certidao certidaoAtualizada) {
 
         Optional<Certidao> consultaExistente = this.repository.findById(id);
@@ -49,10 +60,10 @@ public class CertidaoController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity excluirCertidao(@PathVariable Integer id) {
-        if (this.repository.existsById(id)) {
-            this.repository.deleteById(id);
+    @DeleteMapping("/{idCertidao}/{id}")
+    public ResponseEntity excluirCertidao(@PathVariable Integer idCertidao,@PathVariable Integer id) {
+        if (this.repository.existsByIdCertidaoAndCartorio(idCertidao,id)) {
+            this.repository.deletarCertidao(idCertidao, id);
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();

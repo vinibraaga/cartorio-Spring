@@ -2,6 +2,7 @@ package com.docket.cartorio.controllers;
 
 import com.docket.cartorio.entities.Cartorio;
 import com.docket.cartorio.repositories.CartorioRepository;
+import com.docket.cartorio.repositories.CertidaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,9 @@ public class CartorioController {
 
     @Autowired
     private CartorioRepository repository;
+
+    @Autowired
+    private CertidaoRepository certidaoRepository;
 
     @PostMapping
     public ResponseEntity criarCartorio(@RequestBody Cartorio novoCartorio) {

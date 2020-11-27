@@ -1,8 +1,6 @@
 package com.docket.cartorio.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Cartorio {
