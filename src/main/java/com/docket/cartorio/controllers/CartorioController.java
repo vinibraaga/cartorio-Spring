@@ -1,66 +1,80 @@
+
 package com.docket.cartorio.controllers;
 
 import com.docket.cartorio.entities.Cartorio;
 import com.docket.cartorio.repositories.CartorioRepository;
 import com.docket.cartorio.repositories.CertidaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.util.List;
 
-@RestController
+
+@Controller
 @RequestMapping("/cartorios")
 public class CartorioController {
 
     @Autowired
     private CartorioRepository repository;
 
-    @Autowired
-    private CertidaoRepository certidaoRepository;
+    //Redireciona para adicionar Cartorio
+    @GetMapping("adicionar")
+    public String redAddCartorio(Cartorio cartorio) {
+        return "addCartorio";
+    }
 
-    @PostMapping
-    public ResponseEntity criarCartorio(@RequestBody Cartorio novoCartorio) {
+    //lista de Cartorios
+    @GetMapping("lista")
+    public String litarCartorios(Model model) {
+        model.addAttribute("cartorios", repository.findAll());
+        return "listaCartorios";
+    }
+
+    // Adicionar Cartorio
+    @PostMapping("add")
+    public String addCartorio(Cartorio novoCartorio, BindingResult result) {
+        if (result.hasErrors()) {
+            return "addCartorio";
+        }
         this.repository.save(novoCartorio);
 
-        return ResponseEntity.created(null).build();
+        return "redirect:lista";
     }
 
-    @GetMapping
-    public ResponseEntity listarCartorios() {
-        if (this.repository.count() > 0) {
-            return ResponseEntity.ok(this.repository.findAll());
-        } else {
-            return  ResponseEntity.noContent().build();
+    //Visualização cartório
+    @GetMapping("editar/{id}")
+    public String editarCartorio(@PathVariable("id") Integer id, Model model) {
+        Cartorio cartorio = repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Cartorio com id invalido:" + id));
+        model.addAttribute("cartorio", cartorio);
+        return "alterarCartorio";
+    }
+
+    //Atualização cartorio
+    @PostMapping("atualizar/{id}")
+    public String atualizarCartorio(@PathVariable("id") Integer id, Cartorio cartorio, BindingResult result,
+                                 Model model) {
+        if (result.hasErrors()) {
+            cartorio.setId(id);
+            return "alterarCartorio";
         }
+        repository.save(cartorio);
+        model.addAttribute("cartorios", repository.findAll());
+        return "listaCartorios";
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity alterarCartorio(@PathVariable Integer id, @RequestBody Cartorio cartorioAtualizado) {
-
-        Optional <Cartorio> consultaExistente = this.repository.findById(id);
-
-        if (consultaExistente.isPresent()) {
-            Cartorio cartorioEncontrado = consultaExistente.get();
-
-            cartorioEncontrado.setNome(cartorioAtualizado.getNome());
-            cartorioEncontrado.setEndereco(cartorioAtualizado.getEndereco());
-
-            this.repository.save(cartorioEncontrado);
-
-            return  ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    //Exclusão cartorio
+    @GetMapping("deletar/{id}")
+    public String deletarCartorio(@PathVariable("id") Integer id, Model model) {
+        Cartorio cartorio = repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Cartorio com id invalido:" + id));
+        repository.delete(cartorio);
+        model.addAttribute("cartorios", repository.findAll());
+        return "listaCartorios";
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity excluirCartorio(@PathVariable Integer id) {
-        if (this.repository.existsById(id)) {
-            this.repository.deleteById(id);
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
+
 }

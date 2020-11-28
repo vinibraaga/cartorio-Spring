@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Cartorio Docket</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
+          integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz"
+          crossorigin="anonymous">
+    <style>
+        .btn-primary{
+        color: #fff;
+        background-color: #6b4ea5;
+        border-color: #6b4ea5;
+        }
+        .btn-primary:hover{
+        color: #fff;
+        background-color: #9082c8;
+        border-color: #9082c8;
+        }
+    </style>
+</head>
+<body>
+<div class="container my-5">
+    <h3> Adicionar Cartorio</h3>
+    <div class="card">
+        <div class="card-body">
+            <div class="col-md-10">
+                <form action="#" th:action="@{/cartorios/add}"
+                      th:object="${cartorio}" method="post">
+                    <div class="row">
+                        <div class="form-group col-md-8">
+                            <label for="nome" class="col-form-label">Nome do cartório</label> <input
+                                type="text" th:field="*{nome}" class="form-control" id="nome"
+                                placeholder="Digite aqui" maxlength="20" required> <span
+                                th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"
+                                class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group col-md-8">
+                            <label for="endereco" class="col-form-label">Endereço</label> <input
+                                type="text" th:field="*{endereco}" class="form-control" id="endereco"
+                                placeholder="Digite aqui" maxlength="20" required> <span
+                                th:if="${#fields.hasErrors('endereco')}" th:errors="*{endereco}"
+                                class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <input type="submit" class="btn btn-primary" value="Adicionar cartório">
+                        </div>
+
+                        <p class="col-md-6">
+                            <a href="/cartorios/lista" class="btn btn-primary">Lista de Cartorios</a>
+                        </p>
+
+                        <div class="form-group col-md-8"></div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
