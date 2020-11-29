@@ -28,58 +28,61 @@ public class CertidaoController {
 
     //Página adicionar certidao
     @GetMapping("/adicionar/{id}")
-    public String certidaoAdd(@PathVariable("id") Integer id,Certidao certidao, Model model) {
+    public String certidaoAdd(@PathVariable("id") Long id,Certidao certidao, Model model) {
         Cartorio cartorio = cartorioRepository.findById(id).get();
-        certidao.setCartorio(cartorio);
         model.addAttribute("cartorio",cartorio);
-        model.addAttribute("certidao", certidao);
         return "addCertidao";
     }
 
     // Adicionar Certidao
     @PostMapping("adicionarCertidao/{id}")
-    public String addCertidao(@PathVariable("id") Integer id,Certidao novaCertidao, BindingResult result, Model model) {
+    public String addCertidao(@PathVariable("id") Long id,Certidao novaCertidao, Model model) {
         Cartorio cartorio = cartorioRepository.findById(id).get();
         novaCertidao.setCartorio(cartorio);
         this.repository.save(novaCertidao);
-        model.addAttribute("cartorio",cartorio);
-        model.addAttribute("certidoes", repository.findAll());
+        model.addAttribute("certidoes", novaCertidao);
         return "listaCertidoes";
     }
 
-    //Página com lista de certidao
+    //Página com lista de certidao do cartorio
     @GetMapping("listaCertidao/{id}")
-    public String listarCertidao(@PathVariable("id") Integer id,Model model) {
+    public String listarCertidao(@PathVariable("id") Long id,Model model) {
         List certidoes = repository.findByCartorioId(id);
         model.addAttribute("certidoes", certidoes);
         return "listaCertidoes";
     }
 
+    //Lista de todas as certidoes
+    @GetMapping("listaCertidao")
+    public String listarCertidoes(Certidao certidao,Model model) {
+        model.addAttribute("certidoes", repository.findAll());
+        return "listaCertidoes";
+    }
 
-    //Visualização certidao
+
+    //Visualização da certidao
     @GetMapping("editar/{idCertidao}")
-    public String showUpdateForm(@PathVariable("idCertidao") Integer id, Model model) {
+    public String editarCertidao(@PathVariable("idCertidao") Long id, Model model) {
         Certidao certidao = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Certidao com id invalido:" + id));
         model.addAttribute("certidao", certidao);
         return "alterarCertidao";
     }
 
-    //Atualização certidao
+    //Atualização da certidao
     @PostMapping("atualizar/{idCertidao}")
-    public String atualizarCertidao(@PathVariable("idCertidao") Integer id, Certidao certidao, BindingResult result,
-                                 Model model) {
+    public String atualizarCertidao(@PathVariable("idCertidao") Long id, Certidao certidao, Model model) {
         Optional<Certidao> consultaExistente = this.repository.findById(id);
         Certidao certidaoEncontrada = consultaExistente.get();
         certidaoEncontrada.setNome(certidao.getNome());
         repository.save(certidaoEncontrada);
-        model.addAttribute("certidoes", repository.findAll());
+        model.addAttribute("certidoes", certidaoEncontrada);
         return "listaCertidoes";
     }
 
     //Excluir Certidao
     @GetMapping("deletar/{idCertidao}")
-    public String deleteCertidao(@PathVariable("idCertidao") Integer id, Model model) {
+    public String deleteCertidao(@PathVariable("idCertidao") Long id, Model model) {
         Certidao certidao = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Certidao com id invalido:" + id));
         repository.delete(certidao);

@@ -32,7 +32,7 @@ public class CartorioRestController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity alterarCartorio(@PathVariable Integer id, @RequestBody Cartorio cartorioAtualizado) {
+    public ResponseEntity alterarCartorio(@PathVariable Long id, @RequestBody Cartorio cartorioAtualizado) {
 
         Optional <Cartorio> consultaExistente = this.repository.findById(id);
 
@@ -51,7 +51,7 @@ public class CartorioRestController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity excluirCartorio(@PathVariable Integer id) {
+    public ResponseEntity excluirCartorio(@PathVariable Long id) {
         if (this.repository.existsById(id)) {
             this.repository.deleteById(id);
             return ResponseEntity.ok().build();

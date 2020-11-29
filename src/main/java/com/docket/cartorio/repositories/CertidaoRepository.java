@@ -8,14 +8,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public interface CertidaoRepository extends JpaRepository<Certidao, Integer> {
+public interface CertidaoRepository extends JpaRepository<Certidao, Long> {
 
-    List<Certidao> findByCartorioId(Integer id);
+    List<Certidao> findByCartorioId(Long id);
 
-    boolean existsByIdCertidaoAndCartorio(Integer idCertidao, Integer id);
+    boolean existsByIdCertidaoAndCartorio(Long idCertidao, Long id);
 
     @Transactional
     @Modifying
     @Query("delete from Certidao where idCertidao is ?1 and cartorio.id is ?2")
-    int deletarCertidao(Integer idCertidao, Integer id);
+    int deletarCertidao(Long idCertidao, Long id);
 }

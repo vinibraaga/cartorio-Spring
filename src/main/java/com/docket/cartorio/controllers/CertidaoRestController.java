@@ -22,7 +22,7 @@ public class CertidaoRestController {
     private CartorioRepository cartorioRepository;
 
     @PostMapping("/{id}")
-    public ResponseEntity criarCertidao(@PathVariable Integer id ,@RequestBody Certidao novaCertidao) {
+    public ResponseEntity criarCertidao(@PathVariable Long id ,@RequestBody Certidao novaCertidao) {
 
         Cartorio cartorio = cartorioRepository.findById(id).get();
 
@@ -36,14 +36,14 @@ public class CertidaoRestController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity listarCertidoesCartorio(@PathVariable Integer id) {
+    public ResponseEntity listarCertidoesCartorio(@PathVariable Long id) {
         List certidoes = repository.findByCartorioId(id);
 
         return certidoes.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(certidoes);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity alterarCertidao(@PathVariable Integer id, @RequestBody Certidao certidaoAtualizada) {
+    public ResponseEntity alterarCertidao(@PathVariable Long id, @RequestBody Certidao certidaoAtualizada) {
 
         Optional<Certidao> consultaExistente = this.repository.findById(id);
 
@@ -61,7 +61,7 @@ public class CertidaoRestController {
     }
 
     @DeleteMapping("/{idCertidao}/{id}")
-    public ResponseEntity excluirCertidao(@PathVariable Integer idCertidao,@PathVariable Integer id) {
+    public ResponseEntity excluirCertidao(@PathVariable Long idCertidao,@PathVariable Long id) {
         if (this.repository.existsByIdCertidaoAndCartorio(idCertidao,id)) {
             this.repository.deletarCertidao(idCertidao, id);
             return ResponseEntity.ok().build();

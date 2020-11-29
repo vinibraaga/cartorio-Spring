@@ -4,23 +4,24 @@ package com.docket.cartorio.entities;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "TB_CERTIDAO")
 public class Certidao {
-
-    @Id
-    @GeneratedValue
-    private Integer idCertidao;
-
-    private String nome;
 
     @ManyToOne
     @JoinColumn(name = "fkCartorio")
     private Cartorio cartorio;
 
-    public Integer getIdCertidao() {
+    @Id
+    @GeneratedValue
+    private Long idCertidao;
+
+    private String nome;
+
+    public Long getIdCertidao() {
         return idCertidao;
     }
 
-    public void setIdCertidao(Integer idCertidao) {
+    public void setIdCertidao(Long idCertidao) {
         this.idCertidao = idCertidao;
     }
 

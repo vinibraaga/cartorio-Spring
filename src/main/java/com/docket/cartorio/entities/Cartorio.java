@@ -1,21 +1,24 @@
 package com.docket.cartorio.entities;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-public class Cartorio {
+@Table(name = "TB_CARTORIO")
+public class Cartorio implements Serializable {
 
+    private static final long serialVersionUID = 5050;
     @Id
-    @GeneratedValue
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String nome;
 
     private String endereco;
 
-    public Integer getId() { return id; }
+    public Long getId() { return id; }
 
-    public void setId(Integer id) { this.id = id; }
+    public void setId(Long id) { this.id = id; }
 
     public String getNome() { return nome; }
 

@@ -10,9 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-
 @Controller
 @RequestMapping("/cartorios")
 public class CartorioController {
@@ -20,17 +17,13 @@ public class CartorioController {
     @Autowired
     private CartorioRepository repository;
 
+    @Autowired
+    private CertidaoRepository certidaoRepository;
+
     //Redireciona para adicionar Cartorio
     @GetMapping("adicionar")
     public String redAddCartorio(Cartorio cartorio) {
         return "addCartorio";
-    }
-
-    //lista de Cartorios
-    @GetMapping("lista")
-    public String litarCartorios(Model model) {
-        model.addAttribute("cartorios", repository.findAll());
-        return "listaCartorios";
     }
 
     // Adicionar Cartorio
@@ -44,9 +37,16 @@ public class CartorioController {
         return "redirect:lista";
     }
 
+    //lista de Cartorios
+    @GetMapping("lista")
+    public String litarCartorios(Model model) {
+        model.addAttribute("cartorios", repository.findAll());
+        return "listaCartorios";
+    }
+
     //Visualização cartório
     @GetMapping("editar/{id}")
-    public String editarCartorio(@PathVariable("id") Integer id, Model model) {
+    public String editarCartorio(@PathVariable("id") Long id, Model model) {
         Cartorio cartorio = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Cartorio com id invalido:" + id));
         model.addAttribute("cartorio", cartorio);
@@ -55,7 +55,7 @@ public class CartorioController {
 
     //Atualização cartorio
     @PostMapping("atualizar/{id}")
-    public String atualizarCartorio(@PathVariable("id") Integer id, Cartorio cartorio, BindingResult result,
+    public String atualizarCartorio(@PathVariable("id") Long id, Cartorio cartorio, BindingResult result,
                                  Model model) {
         if (result.hasErrors()) {
             cartorio.setId(id);
@@ -68,10 +68,13 @@ public class CartorioController {
 
     //Exclusão cartorio
     @GetMapping("deletar/{id}")
-    public String deletarCartorio(@PathVariable("id") Integer id, Model model) {
+    public String deletarCartorio(@PathVariable("id") Long id, Model model) {
         Cartorio cartorio = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Cartorio com id invalido:" + id));
+        var certidao = certidaoRepository.findByCartorioId(id);
+        certidaoRepository.deleteAll(certidao);
         repository.delete(cartorio);
+
         model.addAttribute("cartorios", repository.findAll());
         return "listaCartorios";
     }
