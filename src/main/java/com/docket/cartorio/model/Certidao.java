@@ -1,4 +1,4 @@
-package com.docket.cartorio.entities;
+package com.docket.cartorio.model;
 
 
 import javax.persistence.*;

@@ -1,9 +1,9 @@
-package com.docket.cartorio.controllers;
+package com.docket.cartorio.controller;
 
-import com.docket.cartorio.entities.Cartorio;
-import com.docket.cartorio.entities.Certidao;
-import com.docket.cartorio.repositories.CartorioRepository;
-import com.docket.cartorio.repositories.CertidaoRepository;
+import com.docket.cartorio.model.Cartorio;
+import com.docket.cartorio.model.Certidao;
+import com.docket.cartorio.repository.CartorioRepository;
+import com.docket.cartorio.repository.CertidaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

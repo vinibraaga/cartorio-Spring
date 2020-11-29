@@ -1,6 +1,6 @@
-package com.docket.cartorio.repositories;
+package com.docket.cartorio.repository;
 
-import com.docket.cartorio.entities.Cartorio;
+import com.docket.cartorio.model.Cartorio;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CartorioRepository extends JpaRepository<Cartorio, Long> {

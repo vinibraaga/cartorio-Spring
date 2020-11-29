@@ -1,6 +1,6 @@
-package com.docket.cartorio.repositories;
+package com.docket.cartorio.repository;
 
-import com.docket.cartorio.entities.Certidao;
+import com.docket.cartorio.model.Certidao;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
